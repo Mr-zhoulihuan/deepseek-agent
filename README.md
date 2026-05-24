@@ -16,8 +16,6 @@ deepseek-agent/
 ├── file_create.go       # 文件/数据库备份任务创建
 ├── progress.go          # 进度条模拟（遗留，未使用）
 ├── go.mod               # Go 模块定义
-├── json/
-│   └── FBSWebBak.json   # API 接口文档备份（历史参考）
 └── README.md            # 本文件
 ```
 
@@ -272,11 +270,4 @@ go run .
 
 ---
 
-## 版本历史
 
-| 版本 | 说明 |
-|------|------|
-| v1 | 初始版本，直接调用 FBSWebBak API |
-| v2 | 切换到本地假数据模式，模拟备份数据 |
-| v3 | 接入 DeepSeek API，AI 驱动所有数据生成 |
-| v4 | 新增自由对话模块，展示思考过程 |
