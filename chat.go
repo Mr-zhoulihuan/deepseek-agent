@@ -10,16 +10,17 @@ const chatSystemPrompt = `你是一个智能助手，可以帮助用户解决各
 请用友好的中文回答用户的问题，回答要清晰、准确、有帮助。`
 
 func handleFreeChat(scanner *bufio.Scanner) {
-	fmt.Println("\n── 自由对话 ──")
-	fmt.Println("💡 输入 'exit' 或 'quit' 返回主菜单")
-	fmt.Println("──────────────────────────────────────────────")
+	PrintTitle("💬 自由对话")
+	PrintInfo("输入 'exit' 或 'quit' 返回主菜单")
+	PrintDivider()
 
 	messages := []ChatMessage{
 		{Role: "system", Content: chatSystemPrompt},
 	}
 
 	for {
-		fmt.Print("\nYou: ")
+		fmt.Println()
+		fmt.Print(bold(cyan("You")) + ": ")
 		scanned := scanner.Scan()
 		if !scanned {
 			break
@@ -45,22 +46,26 @@ func handleFreeChat(scanner *bufio.Scanner) {
 			Stream:          false,
 		}
 
+		PrintWaiting("思考中...")
 		result, err := chatWithDeepSeekRaw(reqBody)
 		if err != nil {
-			fmt.Printf("❌ 调用 DeepSeek 失败: %v\n", err)
+			PrintError(fmt.Sprintf("调用 DeepSeek 失败: %v", err))
 			messages = messages[:len(messages)-1]
 			continue
 		}
 
 		if result.ReasoningContent != "" {
-			fmt.Println("\n──────────────────────────────────────────────")
-			fmt.Println("🤔 DeepSeek 思考过程:")
-			fmt.Println("──────────────────────────────────────────────")
-			fmt.Println(result.ReasoningContent)
-			fmt.Println("──────────────────────────────────────────────")
+			fmt.Println()
+			PrintDivider()
+			fmt.Println(bold(yellow("🤔 DeepSeek 思考过程:")))
+			fmt.Println(dim(strings.Repeat("─", 50)))
+			fmt.Println(dim(result.ReasoningContent))
+			fmt.Println(dim(strings.Repeat("─", 50)))
 		}
 
-		fmt.Printf("AI: %s\n", result.Content)
+		fmt.Println()
+		fmt.Print(bold(green("AI")) + ": ")
+		fmt.Println(result.Content)
 		messages = append(messages, ChatMessage{Role: "assistant", Content: result.Content})
 	}
 }

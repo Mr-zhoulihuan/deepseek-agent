@@ -2,26 +2,23 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
 func simulateProgress(taskName, taskId string) {
-	fmt.Printf("\n⏳ 任务 [%s] (%s) 正在备份...\n", taskName, taskId)
-	fmt.Println("──────────────────────────────────────────────────────")
+	fmt.Println()
+	fmt.Printf("  "+yellow("⏳")+" "+bold("任务 [%s] (%s)")+" "+yellow("正在备份...")+"\n", taskName, taskId)
+	fmt.Println("  " + dim(strings.Repeat("─", 50)))
 
 	total := 30
+	barWidth := 30
 	for i := 0; i <= total; i++ {
 		percent := i * 100 / total
-		bar := ""
-		for j := 0; j < total; j++ {
-			if j < i {
-				bar += "█"
-			} else {
-				bar += "░"
-			}
-		}
+		filled := i * barWidth / total
+		bar := green(strings.Repeat("█", filled)) + dim(strings.Repeat("░", barWidth-filled))
 
-		fmt.Printf("\r  进度: [%s] %3d%%", bar, percent)
+		fmt.Printf("\r  "+dim("进度:")+" [%s] "+bold("%3d%%"), bar, percent)
 
 		rate := 100
 		if percent < 30 {
@@ -39,6 +36,6 @@ func simulateProgress(taskName, taskId string) {
 	}
 
 	fmt.Println()
-	fmt.Println("✅ 备份完成！")
-	fmt.Println("──────────────────────────────────────────────────────")
+	fmt.Println("  " + green("✅") + " " + green("备份完成！"))
+	fmt.Println("  " + dim(strings.Repeat("─", 50)))
 }

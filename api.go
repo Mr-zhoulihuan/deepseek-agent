@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -133,11 +134,10 @@ func callDeepSeek(reqBody ChatRequestBody) (*ChatResult, error) {
 
 func printWithReasoning(result *ChatResult) {
 	if result.ReasoningContent != "" {
-		fmt.Println("──────────────────────────────────────────────")
-		fmt.Println("🤔 DeepSeek 思考过程:")
-		fmt.Println("──────────────────────────────────────────────")
-		fmt.Println(result.ReasoningContent)
-		fmt.Println("──────────────────────────────────────────────")
+		PrintDivider()
+		fmt.Println(bold(yellow("🤔 DeepSeek 思考过程:")))
+		fmt.Println(dim(strings.Repeat("─", 50)))
+		fmt.Println(dim(result.ReasoningContent))
+		fmt.Println(dim(strings.Repeat("─", 50)))
 	}
-	fmt.Println(result.Content)
 }
